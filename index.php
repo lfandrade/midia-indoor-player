@@ -1,5 +1,5 @@
 <?php
-
+# primeira atualização
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 include("env.php")
