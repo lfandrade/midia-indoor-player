@@ -1,11 +1,13 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
+include("./conecta.php");
+include("./constants.php");
+// Conecta-se ao banco.
+$db = new DB_CONNECT();
+$conn = $db->getConnection();
 
-include("env.php");
 
-$conexao = mysql_connect($servidor,$usuario,$senha);  
-mysql_select_db($banco); 
 
 $id_canalURL = $_GET['canal'];
 
@@ -17,10 +19,10 @@ $id_canalURL = $_GET['canal'];
  where v.id = cv.id_video and d.id_canalPadrao = cv.id_canal and cv.id_canal=$id_canalURL
  order by cv.ordem asc, v.id asc ";
 
-  $result = mysql_query($sql);            
+ $result = $conn->query($sql);          
 
 
-  while($row = mysql_fetch_assoc($result)){
+  while($row = $result->fetch_assoc()){
        $json[] = $row;
   }
 

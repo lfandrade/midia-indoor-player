@@ -1,12 +1,16 @@
 <?php
-include("env.php");
+include("./conecta.php");
+include("./constants.php");
 
-$link = mysql_connect($servidor, $usuario, $senha);
-mysql_set_charset('utf8',$link);
+// Conecta-se ao banco.
+$db = new DB_CONNECT();
+$conn = $db->getConnection();
+
+/*mysqli_set_charset('utf8',$link);
 if (!$link) {
     die('Não foi possível conectar: ' . mysql_error());
-}
-mysql_select_db($banco);
+}*/
+
 
 
 header('Access-Control-Allow-Origin: *');
@@ -59,7 +63,8 @@ $hora = date("His");
 
 $sql="insert into log (id_cliente,id_dispositivo,id_canal, id_video, data, hora, ipaddress,browser,referrer ) values($id_cliente,$id_dispositivo,$id_canal,$id_video, $data, $hora, '$ipaddress','$browser','$referrer');";
 echo "<br>".$sql;
-$result = mysql_query($sql) or die("Error: " . mysql_error());
+
+$result = $conn->query($sql);  
 
 //} 
 

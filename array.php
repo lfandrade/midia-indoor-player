@@ -1,13 +1,17 @@
 <?php
-include("env.php");
-$conexao = mysql_connect($servidor,$usuario,$senha);  
-mysql_select_db($banco); 
+include("./conecta.php");
+include("./constants.php");
+
+// Conecta-se ao banco.
+$db = new DB_CONNECT();
+$conn = $db->getConnection();
 
 
-$result = mysql_query("SELECT * FROM video");            
+$result = $conn->query("SELECT * FROM video");  
 
 
-while($row = mysql_fetch_assoc($result)){
+
+while($row = $result->fetch_assoc()){
      $json[] = $row;
 }
 

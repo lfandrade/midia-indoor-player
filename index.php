@@ -1,12 +1,68 @@
+
+<script>
+  function toggleFullScreen() {
+  if (!document.fullscreenElement &&    // alternative standard method
+      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+  function fullScreen(){
+
+toggleFullScreen();
+
+document.getElementById("video").style.visibility = "visible";
+
+
+
+
+var video = document.getElementById('video');
+
+video.play();
+console.log("fullScreen->video.play()");
+
+  var elem = document.getElementById("video");
+
+if (elem.requestFullscreen) {
+  elem.requestFullscreen();
+} else if (elem.msRequestFullscreen) {
+  elem.msRequestFullscreen();
+} else if (elem.mozRequestFullScreen) {
+  elem.mozRequestFullScreen();
+} else if (elem.webkitRequestFullscreen) {
+  elem.webkitRequestFullscreen();
+}
+}
+  </script>
 <?php
 # primeira atualização
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-include("env.php")
+include("./conecta.php");
+include("./constants.php");
 
+// Conecta-se ao banco.
+$db = new DB_CONNECT();
+$conn = $db->getConnection();
 
-$conexao = mysql_connect($servidor,$usuario,$senha);  
-mysql_select_db($banco); 
 
 
 $id_canalParametro = $_GET['canal'];
@@ -37,10 +93,11 @@ $sql = "select distinct v.id as videoID, v.url, cv.id_canal as canalID, d.id  as
  where v.id = cv.id_video and d.id_canalPadrao = cv.id_canal and cv.id_canal=$id_canalURL";
 /* Fim - 12-10.2018 */
 
-  $result = mysql_query($sql);            
+  
+  $result = $conn->query($sql);           
 //echo $sql;
 
-  while($row = mysql_fetch_assoc($result)){
+while($row = $result->fetch_assoc()) {
        $json[] = $row;
        //echo $row;
   }
@@ -49,11 +106,12 @@ $sql = "select distinct v.id as videoID, v.url, cv.id_canal as canalID, d.id  as
 
 function updateListaVideos(){
    $sql = "select c.id_video as videoID, v.url, c.id_canal as canalID, d.id as dispositivoID, x.id as clienteID from video v, canal_video c, dispositivo d, dispositivo_canal dc, cliente x, cliente_dispositivo z where c.id_video = v.id and c.id_canal=".$id_canalURL." and dc.id_dispositivo = d.id and dc.id_canal = c.id_canal and z.id_dispositivo = d.id and z.id_cliente = x.id order by c.ordem asc";
-
-  $result = mysql_query($sql);            
+   $db = new DB_CONNECT();
+   $conn = $db->getConnection();
+   $result = $conn->query($sql);            
 //echo $sql;
 
-  while($row = mysql_fetch_assoc($result)){
+while($row = $result->fetch_assoc()) {
        $json[] = $row;
        //echo $row;
   }
@@ -111,42 +169,7 @@ function updateListaVideos(){
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
- <!--<script language="jscript">
-
-
-function toggleFullScreen() {
-  if (!document.fullscreenElement &&    // alternative standard method
-      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
-}
-
-
-
-     
-$(document).ready(function(){
-    toggleFullScreen();
-});
-
-    </script>-->
+ 
 <body>
 
 
@@ -313,67 +336,11 @@ function changeSource(url) {
    count++;
 }
 
-function toggleFullScreen() {
-  if (!document.fullscreenElement &&    // alternative standard method
-      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
-}
-
-
-
-function fullScreen(){
-
-  toggleFullScreen();
-
-  document.getElementById("video").style.visibility = "visible";
-
-
-
-
-  var video = document.getElementById('video');
-
-  video.play();
-  console.log("fullScreen->video.play()");
-
-    var elem = document.getElementById("video");
-
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    elem.msRequestFullscreen();
-  } else if (elem.mozRequestFullScreen) {
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) {
-    elem.webkitRequestFullscreen();
-  }
-}
-
 
 $(document).ready(function(){
     toggleFullScreen();
     console.log("documento pronto");
 });
 </script>
-
-
 </body>
 </html>

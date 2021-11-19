@@ -2,11 +2,12 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
+include("./conecta.php");
+include("./constants.php");
 
-include("env.php");
-
-$conexao = mysql_connect($servidor,$usuario,$senha);  
-mysql_select_db($banco); 
+// Conecta-se ao banco.
+$db = new DB_CONNECT();
+$conn = $db->getConnection();
 
 
 //$id_dispositivoURL = $_GET['dispositivo'];
@@ -27,10 +28,10 @@ if($id_canalURL > 0){
 //incluido o Distinct no ID video, para evitar duplicidade de videos quando a chave está furada. Como ocorreu na arco iris que na tabela cliente_dispositivo, existia duas linhas...
 $sql = "select distinct v.id as videoID, v.url, ca.id as canalID, d.id as dispositivoID, cd.id_cliente as clienteID from canal ca, video v, canal_video cv, dispositivo d, cliente_dispositivo cd where cv.id_canal = ca.id and cv.id_video = v.id and d.id_canalPadrao = ca.id and d.id_canalPadrao =".$id_canalURL." and d.id = cd.id_dispositivo order by cv.ordem asc ";
 
-  $result = mysql_query($sql);            
+$result = $conn->query($sql);            
 //echo $sql;
 
-  while($row = mysql_fetch_assoc($result)){
+  while($row = $result->fetch_assoc()){
        $json[] = $row;
        //echo $row;
   }
