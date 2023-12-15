@@ -134,7 +134,7 @@ while($row = $result->fetch_assoc()) {
   
   <meta http-equiv="Cache-control" content="public">
   <meta charset="UTF-8">
-  <title>Player</title>
+  <title>Midia Player</title>
   <style type="text/css">
     video 
 {
@@ -178,7 +178,7 @@ while($row = $result->fetch_assoc()) {
 
 <tr><td>
 <form action="./" method="POST" name="form1">
-  <label for="canal">Código do Canal:</label>
+  <label for="canal"><b>Código do Canal:</b></label>
   <input class="" id="canal" name="canal" type="number">
   <button type="submit" value="OK">OK</button>
 </form>
