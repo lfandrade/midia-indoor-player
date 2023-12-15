@@ -56,8 +56,8 @@ if (elem.requestFullscreen) {
 # primeira atualização
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-include("./conecta.php");
-include("./constants.php");
+include("./includes/conecta.php");
+include("./includes/constants.php");
 
 // Conecta-se ao banco.
 $db = new DB_CONNECT();
